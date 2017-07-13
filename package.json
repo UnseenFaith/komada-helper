@@ -1,0 +1,62 @@
+{
+  "name": "komada-helper",
+  "displayName": "Komada",
+  "version": "0.0.1",
+  "preview": true,
+  "publisher": "dada1134",
+  "description": "Komada helper",
+  "license": "MIT",
+  "author": {
+    "name": "Damian Blume",
+    "email": "damian.blume@gmail.com"
+  },
+  "repository": "",
+  "keywords": [
+    "framework",
+    "komada"
+  ],
+  "main": "./out/src/extension",
+  "scripts": {
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test",
+    "vscode:prepublish": "tsc -p ./"
+  },
+  "dependencies": {
+    "isit": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.40",
+    "mocha": "^2.3.3",
+    "tslint": "^5.5.0",
+    "tslint-config-airbnb": "^5.2.1",
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0"
+  },
+  "engines": {
+    "vscode": "^1.12.0"
+  },
+  "activationEvents": [
+    "workspaceContains:komada.js",
+    "onCommand:extension.newPiece"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "jsonValidation": [
+      {
+        "fileMatch": "schema.json",
+        "url": "./src/settingsSchema.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.newPiece",
+        "title": "Komada: Create new piece"
+      }
+    ]
+  },
+  "icon": "./komada.png"
+}

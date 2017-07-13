@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "JSON schema for the Komada settings schema",
+
+  "type": "object",
+  "required": ["settings"],
+
+  "properties": {
+    "settings": {
+      "description": "A list of settings for your bot.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The key for the setting" 
+          },
+          "type": {
+            "type": "string",
+            "enum": ["user", "channel", "guild", "role", "boolean", "string", "integer", "float", "url", "command"],
+            "description": "The data type"
+          },
+          "default": {
+            "type": ["string", "null", "array", "boolean", "integer", "number"],
+            "description": "The default value for the setting"
+          }
+        }
+      },
+      "required":["name", "type", "default"],
+      "additionalProperties": true
+    }
+  }
+}

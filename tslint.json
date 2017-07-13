@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "semicolon": [
+      "never"
+    ],
+    "space-before-function-paren": false,
+    "trailing-comma": [
+      false
+    ],
+    "max-line-length": [
+      false
+    ]
+  },
+  "extends": "tslint-config-airbnb"
+}
