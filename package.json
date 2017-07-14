@@ -42,6 +42,7 @@
   },
   "activationEvents": [
     "workspaceContains:komada.js",
+    "workspaceContains:komada.ts",
     "onCommand:extension.newPiece"
   ],
   "categories": [

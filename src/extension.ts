@@ -9,18 +9,7 @@ export function activate (context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand('extension.newPiece', async () => {
     if (!vscode.workspace.rootPath) return vscode.window.showErrorMessage('No workspace open')
 
-    let pieceType: string = await vscode.window.showQuickPick([
-      'Command',
-      'Event',
-      'Extendable',
-      'Finalizer',
-      'Function',
-      'Inhibitor',
-      'Monitor'
-      // tslint:disable-next-line:align
-    ], {
-      placeHolder: 'Select piece type'
-    })
+    let pieceType: string = await vscode.window.showQuickPick(possiblePieceTypes, { placeHolder: 'Select piece type' })
 
     if (!isit('non-empty string', pieceType)) return
 
@@ -54,11 +43,13 @@ export function activate (context: vscode.ExtensionContext) {
 
     if (!isit('non-empty string', commandName)) return
 
-    const newFilePath: string = resolve(`${piecesFolder}${sep}${folderName}${sep}${commandName}.js`)
+    const lang: 'js' | 'ts' = fs.exists(`${vscode.workspace.rootPath}${sep}komada.ts`) ? 'ts' : 'js'
+
+    const newFilePath: string = resolve(`${piecesFolder}${sep}${folderName}${sep}${commandName}.${lang}`)
 
     if (fs.existsSync(newFilePath)) return vscode.window.showErrorMessage('A file with this name already exisists in that folder.')
 
-    fs.writeFileSync(newFilePath, createFileContent(pieceType, commandName))
+    fs.writeFileSync(newFilePath, generateFileContent(lang, pieceType, commandName))
 
     vscode.workspace.openTextDocument(vscode.Uri.file(newFilePath)).then(textDocument => vscode.window.showTextDocument(textDocument))
   })
@@ -66,18 +57,39 @@ export function activate (context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable)
 }
 
-function createFileContent (type: string, name: string) {
-  return templates[type].replace('INSERT HERE', name)
+function generateFileContent (lang: 'js' | 'ts', type: string, name: string): string {
+  return templates[lang][type].replace('INSERT HERE', name)
 }
 
 export function deactivate () { }
 
 const templates: object = {
-  command: 'exports.run = async (client, msg, [...args]) => {\r\n  \/\/ Place Code Here\r\n};\r\n\r\nexports.conf = {\r\n  enabled: true,\r\n  runIn: [\"text\", \"group\", \"dm\"],\r\n  aliases: [],\r\n  permLevel: 0,\r\n  botPerms: [],\r\n  requiredFuncs: [],\r\n  cooldown: 0\r\n};\r\n\r\nexports.help = {\r\n  name: \"INSERT HERE\",\r\n  description: \"\",\r\n  usage: \"\",\r\n  usageDelim: \"\",\r\n  extendedHelp: \"\"\r\n};\r\n',
-  event: 'exports.run = (client, ...args) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
-  extendable: '',
-  finalizer: '',
-  function: '',
-  inhibitor: 'exports.conf = {\r\n  enabled: true,\r\n  priority: 0,\r\n};\r\n\r\nexports.run = (client, msg, cmd) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
-  monitor: 'exports.conf = {\r\n  enabled: true,\r\n  ignoreBots: false,\r\n  ignoreSelf: false,\r\n};\r\n\r\nexports.run = (client, msg) => {\r\n  \/\/ Place Code Here\r\n};\r\n'
+  js: {
+    command: 'exports.run = async (client, msg, [...args]) => {\r\n  \/\/ Place Code Here\r\n};\r\n\r\nexports.conf = {\r\n  enabled: true,\r\n  runIn: [\"text\", \"group\", \"dm\"],\r\n  aliases: [],\r\n  permLevel: 0,\r\n  botPerms: [],\r\n  requiredFuncs: [],\r\n  cooldown: 0\r\n};\r\n\r\nexports.help = {\r\n  name: \"INSERT HERE\",\r\n  description: \"\",\r\n  usage: \"\",\r\n  usageDelim: \"\",\r\n  extendedHelp: \"\"\r\n};\r\n',
+    event: 'exports.run = (client, ...args) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
+    extendable: 'exports.conf = {\r\n  type: \"get|method\",\r\n  method: \"INSERT HERE\",\r\n  appliesTo: [],\r\n};\r\n\r\nexports.extend = function () {\r\n \/\/ Place Code Here\r\n};\r\n',
+    finalizer: 'exports.run = (client, msg, mes, start) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
+    function: 'module.exports = (...args) => {\r\n  \/\/ Place Code Here\r\n};\r\n\r\nmodule.exports.conf = {\r\n  requiredModules: []\r\n};\r\n\r\nmodule.exports.help = {\r\n  name: \"INSERT HERE\",\r\n  type: \"functions\",\r\n  description: \"\",\r\n};\r\n',
+    inhibitor: 'exports.conf = {\r\n  enabled: true,\r\n  priority: 0,\r\n};\r\n\r\nexports.run = (client, msg, cmd) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
+    monitor: 'exports.conf = {\r\n  enabled: true,\r\n  ignoreBots: false,\r\n  ignoreSelf: false,\r\n};\r\n\r\nexports.run = (client, msg) => {\r\n  \/\/ Place Code Here\r\n};\r\n'
+  },
+  ts: {
+    command: '',
+    event: '',
+    extendable: '',
+    finalizer: '',
+    function: '',
+    inhibitor: '',
+    monitor: ''
+  }
 }
+
+const possiblePieceTypes: string[] = [
+  'Command',
+  'Event',
+  'Extendable',
+  'Finalizer',
+  'Function',
+  'Inhibitor',
+  'Monitor'
+]
