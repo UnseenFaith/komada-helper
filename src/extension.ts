@@ -1,95 +1,91 @@
-'use strict'
-
-import * as vscode from 'vscode'
-import * as fs from 'fs'
-import { sep, resolve } from 'path'
+import * as fs from 'fs-extra'
 import * as isit from 'isit'
+import * as path from 'path'
+import * as pathType from 'path-type'
+import * as vscode from 'vscode'
 
-export function activate (context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand('extension.newPiece', async () => {
-    if (!vscode.workspace.rootPath) return vscode.window.showErrorMessage('No workspace open')
+export async function activate (context: vscode.ExtensionContext) {
 
-    let pieceType: string = await vscode.window.showQuickPick(possiblePieceTypes, { placeHolder: 'Select piece type' })
+	const newPiece = vscode.commands.registerCommand('komadaHelper.newPiece', async () => {
 
-    if (!isit('non-empty string', pieceType)) return
+		if (!vscode.workspace.rootPath) return vscode.window.showErrorMessage('No workspace open')
 
-    pieceType = pieceType.toLowerCase()
+		let pieceType: string = await vscode.window.showQuickPick(pieceTypes, { placeHolder: 'Select piece type' })
+		if (!isit('non-empty string', pieceType)) return
+		pieceType = pieceType.toLowerCase()
+		const pieceTypePlural: string = `${pieceType}s`
+		let newFilePath: string = path.join(vscode.workspace.rootPath, pieceTypePlural)
 
-    const pieceTypePlural: string = `${pieceType.toLowerCase()}s`
+		if (pieceType === 'command') {
+			let folderName: string = await vscode.window.showQuickPick(
+				fs.ensureDir(newFilePath).then(() => fs.readdir(newFilePath).then(fileNames => {
+					const fileNames2 = fileNames.filter(async fileName => await pathType.dir(path.join(newFilePath, fileName)))
+					fileNames2.unshift('Create new folder')
+					return fileNames2
+				})), { placeHolder: 'Select folder' }
+			)
 
-    const piecesFolder: string = resolve(`${vscode.workspace.rootPath}${sep}${pieceTypePlural}`)
+			if (folderName === 'Create new folder') folderName = await vscode.window.showInputBox({ prompt: 'Enter folder name', placeHolder: 'Folder' })
 
-    if (!fs.existsSync(piecesFolder)) fs.mkdirSync(piecesFolder)
+			if (!isit('non-empty string', folderName)) return
 
-    const folders: string[] = fs.readdirSync(piecesFolder)
-      .filter(f => fs.statSync(`${piecesFolder}${sep}${f}`).isDirectory())
-    folders.unshift('Create new folder')
+			newFilePath = path.join(newFilePath, folderName)
+		}
 
-    let folderName: string = await vscode.window.showQuickPick(folders, { placeHolder: 'Select folder' })
+		const pieceName: string = pieceType === 'event'
+			? await vscode.window.showQuickPick(Object.keys(events), { placeHolder: 'Select event' })
+			: await vscode.window.showInputBox({ prompt: `Enter the name of the ${pieceType}`, placeHolder: 'Name' })
 
-    if (!isit('non-empty string', folderName)) return
+		if (!isit('non-empty string', pieceName)) return
 
-    if (folderName === 'Create new folder') {
-      folderName = await vscode.window.showInputBox({
-        prompt: 'Enter folder name',
-        placeHolder: 'Folder'
-      })
-      fs.mkdirSync(`${piecesFolder}${sep}${folderName}`)
-    }
-    const commandName = await vscode.window.showInputBox({
-      prompt: `Enter the name of the ${pieceType}`,
-      placeHolder: 'Name'
-    })
+		newFilePath = path.format({
+			dir: newFilePath,
+			name: pieceName,
+			ext: '.js'
+		} as any)
 
-    if (!isit('non-empty string', commandName)) return
+		if (fs.existsSync(newFilePath)) return vscode.window.showErrorMessage(`A file called "${pieceName}.js" already exists`)
 
-    const lang: 'js' | 'ts' = fs.exists(`${vscode.workspace.rootPath}${sep}komada.ts`) ? 'ts' : 'js'
+		fs.outputFileSync(newFilePath, generateFileContent(pieceType, pieceName))
 
-    const newFilePath: string = resolve(`${piecesFolder}${sep}${folderName}${sep}${commandName}.${lang}`)
+		vscode.workspace.openTextDocument(vscode.Uri.file(newFilePath)).then(textDocument => vscode.window.showTextDocument(textDocument))
+	})
 
-    if (fs.existsSync(newFilePath)) return vscode.window.showErrorMessage('A file with this name already exisists in that folder.')
+	const init = vscode.commands.registerCommand('komadaHelper.init', async () => {
+		const entryFileFullPath = path.resolve(vscode.workspace.rootPath, 'komada.js')
+		if (!fs.existsSync(entryFileFullPath)) fs.outputFile(entryFileFullPath, templates.indexFile)
+		const terminal = vscode.window.createTerminal('Komada')
+		terminal.show()
+		terminal.sendText('npm init -y')
+		terminal.sendText('npm install komada')
+	})
 
-    fs.writeFileSync(newFilePath, generateFileContent(lang, pieceType, commandName))
+	context.subscriptions.push(newPiece)
+	context.subscriptions.push(init)
 
-    vscode.workspace.openTextDocument(vscode.Uri.file(newFilePath)).then(textDocument => vscode.window.showTextDocument(textDocument))
-  })
-
-  context.subscriptions.push(disposable)
 }
 
-function generateFileContent (lang: 'js' | 'ts', type: string, name: string): string {
-  return templates[lang][type].replace('INSERT HERE', name)
+function generateFileContent (type: string, name: string): string {
+	let content = templates[type].replace('NAME', name)
+	if (type === 'event') content = content.replace('...args', events[name])
+	return content
 }
 
 export function deactivate () { }
 
-const templates: object = {
-  js: {
-    command: 'exports.run = async (client, msg, [...args]) => {\r\n  \/\/ Place Code Here\r\n};\r\n\r\nexports.conf = {\r\n  enabled: true,\r\n  runIn: [\"text\", \"group\", \"dm\"],\r\n  aliases: [],\r\n  permLevel: 0,\r\n  botPerms: [],\r\n  requiredFuncs: [],\r\n  cooldown: 0\r\n};\r\n\r\nexports.help = {\r\n  name: \"INSERT HERE\",\r\n  description: \"\",\r\n  usage: \"\",\r\n  usageDelim: \"\",\r\n  extendedHelp: \"\"\r\n};\r\n',
-    event: 'exports.run = (client, ...args) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
-    extendable: 'exports.conf = {\r\n  type: \"get|method\",\r\n  method: \"INSERT HERE\",\r\n  appliesTo: [],\r\n};\r\n\r\nexports.extend = function () {\r\n \/\/ Place Code Here\r\n};\r\n',
-    finalizer: 'exports.run = (client, msg, mes, start) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
-    function: 'module.exports = (...args) => {\r\n  \/\/ Place Code Here\r\n};\r\n\r\nmodule.exports.conf = {\r\n  requiredModules: []\r\n};\r\n\r\nmodule.exports.help = {\r\n  name: \"INSERT HERE\",\r\n  type: \"functions\",\r\n  description: \"\",\r\n};\r\n',
-    inhibitor: 'exports.conf = {\r\n  enabled: true,\r\n  priority: 0,\r\n};\r\n\r\nexports.run = (client, msg, cmd) => {\r\n  \/\/ Place Code Here\r\n};\r\n',
-    monitor: 'exports.conf = {\r\n  enabled: true,\r\n  ignoreBots: false,\r\n  ignoreSelf: false,\r\n};\r\n\r\nexports.run = (client, msg) => {\r\n  \/\/ Place Code Here\r\n};\r\n'
-  },
-  ts: {
-    command: '',
-    event: '',
-    extendable: '',
-    finalizer: '',
-    function: '',
-    inhibitor: '',
-    monitor: ''
-  }
+const templates = {
+	command: 'exports.run = async (client, msg, [...args]) => {\n  \/\/ Place Code Here\n};\n\nexports.conf = {\n  enabled: true,\n  runIn: [\"text\", \"group\", \"dm\"],\n  aliases: [],\n  permLevel: 0,\n  botPerms: [],\n  requiredFuncs: [],\n  cooldown: 0\n};\n\nexports.help = {\n  name: \"NAME\",\n  description: \"\",\n  usage: \"\",\n  usageDelim: \"\",\n  extendedHelp: \"\"\n};\n',
+	event: 'exports.run = (client, ...args) => {\n  \/\/ Place Code Here\n};\n',
+	extendable: 'exports.conf = {\n  type: \"get\" || \"method\",\n  method: \"NAME\",\n  appliesTo: [],\n};\n\nexports.extend = function () {\n \/\/ Place Code Here\n};\n',
+	finalizer: 'exports.run = (client, msg, mes, start) => {\n  \/\/ Place Code Here\n};\n',
+	function: 'module.exports = (...args) => {\n  \/\/ Place Code Here\n};\n\nmodule.exports.conf = {\n  requiredModules: []\n};\n\nmodule.exports.help = {\n  name: \"NAME\",\n  type: \"functions\",\n  description: \"\",\n};\n',
+	inhibitor: 'exports.conf = {\n  enabled: true,\n  priority: 0,\n};\n\nexports.run = (client, msg, cmd) => {\n  \/\/ Place Code Here\n};\n',
+	monitor: 'exports.conf = {\n  enabled: true,\n  ignoreBots: false,\n  ignoreSelf: false,\n};\n\nexports.run = (client, msg) => {\n  \/\/ Place Code Here\n};\n',
+	indexFile: 'const komada = require(\"komada\")\n\nconst client = new komada.Client({\n  ownerID: \"your-user-id\",\n  prefix: \"!\"\n})\n\nclient.login(\"your-bot-token\")'
 }
 
-const possiblePieceTypes: string[] = [
-  'Command',
-  'Event',
-  'Extendable',
-  'Finalizer',
-  'Function',
-  'Inhibitor',
-  'Monitor'
-]
+const pieceTypes = ['Command', 'Event', 'Extendable', 'Finalizer', 'Function', 'Inhibitor', 'Monitor']
+
+const events = {
+	ready: '', guildCreate: 'guild', guildDelete: 'guild', guildUpdate: 'oldGuild, newGuild', guildUnavailable: 'guild', guildMemberAdd: 'member', guildMemberRemove: 'member', guildMemberUpdate: 'oldMember, newMember', guildMemberAvailable: 'member', guildMemberSpeaking: 'member, speaking', guildMembersChunk: 'members, guild', roleCreate: 'role', roleDelete: 'role', roleUpdate: 'oldRole, newRole', emojiCreate: 'emoji', emojiDelete: 'emoji', emojiUpdate: 'oldEmoji, newEmoji', guildBanAdd: 'guild, user', guildBanRemove: 'guild, user', channelCreate: 'channel', channelDelete: 'channel', channelUpdate: 'oldChannel, newChannel', channelPinsUpdate: 'channel, time', message: 'message', messageDelete: 'message', messageUpdate: 'oldMessage, newMessage', messageDeleteBulk: 'messages', messageReactionAdd: 'messageReaction, user', messageReactionRemove: 'messageReaction, user', messageReactionRemoveAll: 'message', userUpdate: 'oldUser, newUser', userNoteUpdate: 'user, oldNote, newNote', clientUserSettingsUpdate: 'clientUserSettings', presenceUpdate: 'oldMember, newMember', voiceStateUpdate: 'oldMember, newMember', typingStart: 'channel, user', typingStop: 'channel, user', disconnect: 'event', reconnecting: '', error: 'error', warn: 'info', debug: 'info'
+}
