@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "https://github.com/dada1134/komada-helper/tree/master/json/schema.json",
+  "title": "Komada settings schema",
+  "type": "object",
+  "required": ["prefix", "modRole", "adminRole", "disabledCommands"],
+  "properties": {
+    "prefix": {
+      "title": "The prefix",
+      "allOf":[{ "$ref": "#definitions/setting" }]
+    },
+    "modRole": {
+      "title": "The guild's moderator role, used for permission levels",
+      "allOf":[{ "$ref": "#definitions/setting" }]
+    },
+    "adminRole": {
+      "title": "The guild's administrator role, used for permission levels",
+      "allOf":[{ "$ref": "#definitions/setting" }]
+    },
+    "disabledCommands": {
+      "title": "The disbaled commands for a guild",
+      "allOf":[{ "$ref": "#definitions/setting" }]
+    }
+  },
+  "definitions": {
+    "setting": {
+      "type": "object",
+      "required": ["type", "default"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["User", "Channel", "Guild", "Role", "Boolean", "String", "Integer", "Float", "url", "Command"],
+          "description": "The data type",
+          "default": ""
+        },
+        "default": {
+          "type": ["string", "null", "array", "boolean", "integer", "number"],
+          "description": "The default value for this key",
+          "default": null
+        },
+        "array": {
+          "type": "boolean",
+          "description": "If the value is an array",
+          "default": false
+        },
+        "sql": {
+          "type": "string",
+          "description": "SQL query when creating a new row",
+          "default": ""
+        }
+      },
+      "default": {
+        "type": "",
+        "default": null,
+        "array": false
+      }
+    }
+  },
+  "patternProperties": {
+    ".{1,}": {
+      "title": "Key used to access the setting through the settingGateway",
+      "allOf":[{ "$ref": "#definitions/setting" }]
+    }
+  },
+  "default": {
+    "prefix": {
+      "type": "String",
+      "default": "!",
+      "array": false,
+      "sql": "TEXT NOT NULL DEFAULT '!'"
+    },
+    "modRole": {
+      "type": "Role",
+      "default": null,
+      "array": false,
+      "sql": "TEXT"
+    },
+    "adminRole": {
+      "type": "Role",
+      "default": null,
+      "array": false,
+      "sql": "TEXT"
+    },
+    "disabledCommands": {
+      "type": "Command",
+      "default": [],
+      "array": true,
+      "sql": "TEXT DEFAULT '[]'"
+    }
+  },
+  "additionalProperties": false
+}
