@@ -1,7 +1,18 @@
 {
   "name": "komada-helper",
+  "displayName": "Komada",
   "version": "0.1.0",
+  "preview": true,
+  "publisher": "dada1134",
   "description": "Komada helper",
+  "categories": [
+    "Other"
+  ],
+  "icon": "komada.png",
+  "galleryBanner": {
+    "color": "#36393E",
+    "theme": "dark"
+  },
   "keywords": [
     "Komada"
   ],
@@ -12,9 +23,12 @@
   "license": "MIT",
   "author": "Damian Blume <damian.blume@gmail.com>",
   "main": "./out/src/extension.js",
+  "directories": {
+    "test": "test/"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dada1134/komada-helper.git"
+    "url": "https://github.com/dada1134/komada-helper.git"
   },
   "scripts": {
     "compile": "tsc -watch -p ./",
@@ -22,32 +36,11 @@
     "test": "node ./node_modules/vscode/bin/test",
     "vscode:prepublish": "tsc -p ./"
   },
-  "dependencies": {
-    "fs-extra": "^4.0.0",
-    "isit": "^1.0.0",
-    "path-type": "^3.0.0"
-  },
-  "devDependencies": {
-    "@dada1134/tslint-config": "^0.2.0",
-    "@types/fs-extra": "^3.0.3",
-    "@types/mocha": "^2.2.32",
-    "@types/node": "^8.0.17",
-    "mocha": "^3.4.2",
-    "tslint": "^5.5.0",
-    "typescript": "^2.4.2",
-    "vscode": "^1.0.0"
-  },
-  "engines": {
-    "vscode": "^1.12.0"
-  },
   "activationEvents": [
     "workspaceContains:komada.js",
     "workspaceContains:komada.ts",
     "onCommand:komadaHelper.newPiece",
     "onCommand:komadaHelper.init"
-  ],
-  "categories": [
-    "Other"
   ],
   "contributes": {
     "jsonValidation": [
@@ -67,15 +60,21 @@
       }
     ]
   },
-  "displayName": "Komada",
-  "galleryBanner": {
-    "color": "#36393E",
-    "theme": "dark"
+  "dependencies": {
+    "fs-extra": "^4.0.0",
+    "path-type": "^3.0.0"
   },
-  "icon": "komada.png",
-  "preview": true,
-  "publisher": "dada1134",
-  "directories": {
-    "test": "test"
+  "devDependencies": {
+    "@dada1134/tslint-config": "^0.2.0",
+    "@types/fs-extra": "^3.0.3",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^8.0.17",
+    "mocha": "^3.4.2",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.2",
+    "vscode": "^1.0.0"
+  },
+  "engines": {
+    "vscode": "^1.12.0"
   }
 }
