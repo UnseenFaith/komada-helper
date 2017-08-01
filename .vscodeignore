@@ -9,3 +9,4 @@ tsconfig.json
 tslint.json
 package-lock.json
 node_modules/**/*
+.editorconfig

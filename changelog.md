@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - More info in readme
 - Editorconfig
 - License file
+- Init command
 
 ### Changed
 

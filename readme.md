@@ -16,7 +16,7 @@ You can easily create new pieces with the `newPiece` command. After a couple of 
 
 ### Init
 
-TODO
+The `Komada: Initialize new bot` command will create a `package.json`, install komada and create the entry file and piece folders.
 
 ## Usage
 

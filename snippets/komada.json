@@ -27,7 +27,7 @@
 		"body": "exports.conf = {\n  enabled: true,\n  ignoreBots: false,\n  ignoreSelf: false,\n};\n\nexports.run = (client, msg) => {\n  $0\n};\n",
 		"prefix": "komadaMonitor"
 	},
-	"Create new Komada index file": {
+	"Create new Komada entry file": {
 		"body": "const komada = require(\"komada\")\n\nconst client = new komada.Client({\n  ownerID: \"$1\",\n  prefix: \"${2:!}\"\n})\n\nclient.login(\"${0:your-bot-token}\")",
 		"prefix": "komadaIndex"
 	}

@@ -56,20 +56,25 @@ export async function activate (context: ExtensionContext) {
 		fs.outputFileSync(newFilePath, '')
 
 		const textDocument = await workspace.openTextDocument(Uri.file(newFilePath))
-		await window.showTextDocument(textDocument)
-		const editor = window.activeTextEditor
-		if (!editor) return
-		let snippet =
+		const editor = await window.showTextDocument(textDocument)
 		editor.insertSnippet(generateSnippet(snippets, pieceType, pieceName))
 	})
 
 	const init = commands.registerCommand('komadaHelper.init', async () => {
-		const entryFileFullPath = path.resolve(workspace.rootPath, 'komada.js')
-		if (!fs.existsSync(entryFileFullPath)) fs.outputFile(entryFileFullPath, '')
 		const terminal = window.createTerminal('Komada')
 		terminal.show()
 		terminal.sendText('npm init -y')
 		terminal.sendText('npm install komada')
+
+		const entryFileFullPath = path.resolve(workspace.rootPath, 'komada.js')
+		if (!fs.existsSync(entryFileFullPath)) {
+			fs.outputFile(entryFileFullPath, '')
+			const textDocument = await workspace.openTextDocument(Uri.file(entryFileFullPath))
+			const editor = await window.showTextDocument(textDocument)
+			editor.insertSnippet(generateSnippet(snippets, 'entry file'))
+		}
+
+		pieceTypes.forEach(pieceType => fs.ensureDir(path.join(workspace.rootPath, `${pieceType.toLowerCase()}s`)))
 	})
 
 	context.subscriptions.push(newPiece)
@@ -77,7 +82,7 @@ export async function activate (context: ExtensionContext) {
 
 }
 
-function generateSnippet (snippets, pieceType: string, name: string) {
+function generateSnippet (snippets, pieceType: string, name: string = '') {
 	let content: string = snippets[`Create new Komada ${pieceType}`].body.replace('${1:${TM_FILENAME}}', name)
 	// tslint:disable-next-line:curly
 	if (pieceType === 'event') {
@@ -89,18 +94,7 @@ function generateSnippet (snippets, pieceType: string, name: string) {
 	return new SnippetString(content)
 }
 
-export function deactivate () {}
-
-// const templates = {
-// 	command: 'exports.run = async (client, msg, [...args]) => {\n  \/\/ Place Code Here\n};\n\nexports.conf = {\n  enabled: true,\n  runIn: [\"text\", \"group\", \"dm\"],\n  aliases: [],\n  permLevel: 0,\n  botPerms: [],\n  requiredFuncs: [],\n  cooldown: 0\n};\n\nexports.help = {\n  name: \"NAME\",\n  description: \"\",\n  usage: \"\",\n  usageDelim: \"\",\n  extendedHelp: \"\"\n};\n',
-// 	event: 'exports.run = (client, ...args) => {\n  \/\/ Place Code Here\n};\n',
-// 	extendable: 'exports.conf = {\n  type: \"get\" || \"method\",\n  method: \"NAME\",\n  appliesTo: [],\n};\n\nexports.extend = function () {\n \/\/ Place Code Here\n};\n',
-// 	finalizer: 'exports.run = (client, msg, mes, start) => {\n  \/\/ Place Code Here\n};\n',
-// 	function: 'module.exports = (...args) => {\n  \/\/ Place Code Here\n};\n\nmodule.exports.conf = {\n  requiredModules: []\n};\n\nmodule.exports.help = {\n  name: \"NAME\",\n  type: \"functions\",\n  description: \"\",\n};\n',
-// 	inhibitor: 'exports.conf = {\n  enabled: true,\n  priority: 0,\n};\n\nexports.run = (client, msg, cmd) => {\n  \/\/ Place Code Here\n};\n',
-// 	monitor: 'exports.conf = {\n  enabled: true,\n  ignoreBots: false,\n  ignoreSelf: false,\n};\n\nexports.run = (client, msg) => {\n  \/\/ Place Code Here\n};\n',
-// 	indexFile: 'const komada = require(\"komada\")\n\nconst client = new komada.Client({\n  ownerID: \"your-user-id\",\n  prefix: \"!\"\n})\n\nclient.login(\"your-bot-token\")'
-// }
+export function deactivate () { }
 
 const pieceTypes = ['Command', 'Event', 'Extendable', 'Finalizer', 'Function', 'Inhibitor', 'Monitor']
 
