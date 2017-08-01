@@ -4,13 +4,13 @@ Quickly create new pieces and check the `schema.json` on your [Komada](https://k
 
 ## Features
 
-### `schema.json` schema
+### `schema.json` [schema](schema/schema.json)
 
 The `schema.json` gets IntelliSense, validation and default values.
 
 ### Creating new pieces
 
-There are snippets included for every piece type and the entry (index) file. These new piece snippets have tabstops at configuration points for given piece.
+There are [snippets](snippets/komada.json) included for every piece type and the entry (index) file. These new piece snippets have tabstops at configuration points for given piece.
 
 You can easily create new pieces with the `newPiece` command. After a couple of questions a new file is created and the corresponding snippet is inserted.
 
