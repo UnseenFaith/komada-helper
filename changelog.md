@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+### Added
+
+- More info in readme
+- Editorconfig
+- License file
+
+### Changed
+
+- Moved the piece templates into a separate file
+- Made the template snippets
+- Instead of just putting the code in newly created pieces, insert a snippet
+
 ## [0.1.0]
 
 ### Added

@@ -1,0 +1,34 @@
+{
+	"Create new Komada command": {
+		"body": "exports.run = async (client, msg, [${5:...arguments}]) => {\n  $0\n};\n\nexports.conf = {\n  enabled: true,\n  runIn: [\"text\", \"group\", \"dm\"],\n  aliases: [],\n  permLevel: 0,\n  botPerms: [],\n  requiredFuncs: [],\n  cooldown: 0\n};\n\nexports.help = {\n  name: \"${1:${TM_FILENAME}}\",\n  description: \"$2\",\n  usage: \"$3\",\n  usageDelim: \"$4\",\n  extendedHelp: \"\"\n};\n",
+		"prefix": "komadaCommand"
+	},
+	"Create new Komada event": {
+		"body": "exports.run = (client, ...args) => {\n  $0\n};\n",
+		"prefix": "komadaEvent"
+	},
+	"Create new Komada extendable": {
+		"body": "exports.conf = {\n  type: \"get\" || \"method\",\n  method: \"${1:${TM_FILENAME:COMMAND_NAME}}\",\n  appliesTo: [],\n};\n\nexports.extend = function () {\n  $0\n};\n",
+		"prefix": "komadaExtendable"
+	},
+	"Create new Komada finalizer": {
+		"body": "exports.run = (client, msg, mes, start) => {\n  $0\n};\n",
+		"prefix": "komadaFinalizer"
+	},
+	"Create new Komada function": {
+		"body": "module.exports = (...args) => {\n  $0\n};\n\nmodule.exports.conf = {\n  requiredModules: []\n};\n\nmodule.exports.help = {\n  name: \"${1:${TM_FILENAME}}\",\n  type: \"functions\",\n  description: \"$2\",\n};\n",
+		"prefix": "komadaFunction"
+	},
+	"Create new Komada inhibitor": {
+		"body": "exports.conf = {\n  enabled: true,\n  priority: ${1:0},\n};\n\nexports.run = (client, msg, cmd) => {\n  $0\n};\n",
+		"prefix": "komadaInhibitor"
+	},
+	"Create new Komada monitor": {
+		"body": "exports.conf = {\n  enabled: true,\n  ignoreBots: false,\n  ignoreSelf: false,\n};\n\nexports.run = (client, msg) => {\n  $0\n};\n",
+		"prefix": "komadaMonitor"
+	},
+	"Create new Komada index file": {
+		"body": "const komada = require(\"komada\")\n\nconst client = new komada.Client({\n  ownerID: \"$1\",\n  prefix: \"${2:!}\"\n})\n\nclient.login(\"${0:your-bot-token}\")",
+		"prefix": "komadaIndex"
+	}
+}
