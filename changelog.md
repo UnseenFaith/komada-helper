@@ -33,7 +33,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - Initial release
 
-[Unreleased]: https://github.com/dada1134/komada-helper/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/dada1134/komada-helper/compare/v0.2.0...0.1.0
-[0.1.0]: https://github.com/dada1134/komada-helper/compare/v0.1.0...0.0.2
+[Unreleased]: https://github.com/dada1134/komada-helper/compare/HEAD...0.2.0
+[0.2.0]: https://github.com/dada1134/komada-helper/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/dada1134/komada-helper/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/dada1134/komada-helper/tree/0.0.2
