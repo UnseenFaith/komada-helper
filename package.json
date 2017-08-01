@@ -1,83 +1,83 @@
 {
-  "name": "komada-helper",
-  "displayName": "Komada",
-  "version": "0.1.0",
-  "preview": true,
-  "publisher": "dada1134",
-  "description": "Komada helper",
-  "categories": [
-    "Other"
-  ],
-  "icon": "komada.png",
-  "galleryBanner": {
-    "color": "#36393E",
-    "theme": "dark"
-  },
-  "keywords": [
-    "Komada"
-  ],
-  "homepage": "https://github.com/dada1134/komada-helper#readme",
-  "bugs": {
-    "url": "https://github.com/dada1134/komada-helper/issues"
-  },
-  "license": "MIT",
-  "author": "Damian Blume <damian.blume@gmail.com>",
-  "main": "./out/extension.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dada1134/komada-helper.git"
-  },
-  "scripts": {
-    "compile": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
-    "vscode:prepublish": "tsc -p ./"
-  },
-  "activationEvents": [
-    "workspaceContains:komada.js",
-    "workspaceContains:komada.ts",
-    "onCommand:komadaHelper.newPiece",
-    "onCommand:komadaHelper.init"
-  ],
-  "contributes": {
-    "snippets": [
-      {
-        "language": "javascript",
-        "path": "./snippets/komada.json"
-      }
-    ],
-    "jsonValidation": [
-      {
-        "fileMatch": "schema.json",
-        "url": "./schema/schema.json"
-      }
-    ],
-    "commands": [
-      {
-        "command": "komadaHelper.newPiece",
-        "title": "Komada: Create new piece"
-      },
-      {
-        "command": "komadaHelper.init",
-        "title": "Komada: Initialize new bot"
-      }
-    ]
-  },
-  "dependencies": {
-    "fs-extra": "^4.0.0",
-    "path-type": "^3.0.0"
-  },
-  "devDependencies": {
-    "@dada1134/tslint-config": "^0.2.0",
-    "@types/fs-extra": "^3.0.3",
-    "@types/mocha": "^2.2.32",
-    "@types/node": "^8.0.17",
-    "mocha": "^3.4.2",
-    "tslint": "^5.5.0",
-    "typescript": "^2.4.2",
-    "vscode": "^1.0.0"
-  },
-  "engines": {
-    "vscode": "^1.12.0"
-  }
+	"name": "komada-helper",
+	"displayName": "Komada",
+	"version": "0.1.0",
+	"preview": true,
+	"publisher": "dada1134",
+	"description": "Komada helper",
+	"categories": [
+		"Other"
+	],
+	"icon": "komada.png",
+	"galleryBanner": {
+		"color": "#36393E",
+		"theme": "dark"
+	},
+	"keywords": [
+		"Komada"
+	],
+	"homepage": "https://github.com/dada1134/komada-helper#readme",
+	"bugs": {
+		"url": "https://github.com/dada1134/komada-helper/issues"
+	},
+	"license": "MIT",
+	"author": "Damian Blume <damian.blume@gmail.com>",
+	"main": "./out/extension.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dada1134/komada-helper.git"
+	},
+	"scripts": {
+		"compile": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test",
+		"vscode:prepublish": "tsc -p ./"
+	},
+	"activationEvents": [
+		"workspaceContains:komada.js",
+		"workspaceContains:komada.ts",
+		"onCommand:komadaHelper.newPiece",
+		"onCommand:komadaHelper.init"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "javascript",
+				"path": "./snippets/komada.json"
+			}
+		],
+		"jsonValidation": [
+			{
+				"fileMatch": "schema.json",
+				"url": "./schema/schema.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "komadaHelper.newPiece",
+				"title": "Komada: Create new piece"
+			},
+			{
+				"command": "komadaHelper.init",
+				"title": "Komada: Initialize new bot"
+			}
+		]
+	},
+	"dependencies": {
+		"fs-extra": "^4.0.0",
+		"path-type": "^3.0.0"
+	},
+	"devDependencies": {
+		"@dada1134/tslint-config": "^0.2.0",
+		"@types/fs-extra": "^3.0.3",
+		"@types/mocha": "^2.2.32",
+		"@types/node": "^8.0.17",
+		"mocha": "^3.4.2",
+		"tslint": "^5.5.0",
+		"typescript": "^2.4.2",
+		"vscode": "^1.0.0"
+	},
+	"engines": {
+		"vscode": "^1.12.0"
+	}
 }
