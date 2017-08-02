@@ -64,6 +64,7 @@
 		]
 	},
 	"dependencies": {
+		"finddown-sync": "^1.0.2",
 		"fs-extra": "^4.0.1",
 		"jsonfile": "^3.0.1",
 		"path-type": "^3.0.0"

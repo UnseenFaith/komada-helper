@@ -1,3 +1,4 @@
+import * as findDown from 'finddown-sync'
 import * as fs from 'fs-extra'
 import * as jsonfile from 'jsonfile'
 import * as path from 'path'
@@ -18,7 +19,11 @@ export async function activate (context: ExtensionContext) {
 		pieceType = pieceType.toLowerCase()
 		const pieceTypePlural: string = `${pieceType}s`
 
-		let newFilePath: string = path.join(workspace.rootPath, pieceTypePlural)
+		let baseDir: string = findDown('commands' , { cwd: workspace.rootPath })
+		baseDir = (!baseDir || baseDir[0].includes('node_modules'))
+			? null
+			: path.join(baseDir[0], '..')
+		let newFilePath: string = path.join(baseDir || workspace.rootPath, pieceTypePlural)
 
 		// Commands, unlike other piece types, have categories, wich are subfolders
 		if (pieceType === 'command') {
