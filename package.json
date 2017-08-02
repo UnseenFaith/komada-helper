@@ -22,7 +22,7 @@
 	},
 	"license": "MIT",
 	"author": "Damian Blume <damian.blume@gmail.com>",
-	"main": "./out/extension.js",
+	"main": "./out/src/extension.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/dada1134/komada-helper.git"
