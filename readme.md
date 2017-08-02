@@ -24,7 +24,7 @@ To get the `schema.json` IntelliSense, you just have to call the file `schema.js
 
 To create a new piece, use the `Komada: Create new piece` command and go through the configuration.
 
-The snippets are named like `komadaCommand`, where you replace `komadaCommand` with the name of a piece. The special case is `komadaIndex` wich is the entry file where you create the Komada client.
+The snippets are named like `komadaCommand`, where you replace `Command` with a piece type. The special case is `komadaIndex` wich is the entry file where you create the Komada client.
 
 ## License
 
