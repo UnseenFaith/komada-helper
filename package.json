@@ -36,8 +36,8 @@
 	"activationEvents": [
 		"workspaceContains:komada.js",
 		"workspaceContains:komada.ts",
-		"onCommand:komadaHelper.newPiece",
-		"onCommand:komadaHelper.init"
+		"onCommand:komada-helper.newPiece",
+		"onCommand:komada-helper.init"
 	],
 	"contributes": {
 		"snippets": [
@@ -54,19 +54,16 @@
 		],
 		"commands": [
 			{
-				"command": "komadaHelper.newPiece",
+				"command": "komada-helper.newPiece",
 				"title": "Komada: Create new piece"
 			},
 			{
-				"command": "komadaHelper.init",
+				"command": "komada-helper.init",
 				"title": "Komada: Initialize new bot"
 			}
 		]
 	},
-	"dependencies": {
-		"fs-extra": "^4.0.0",
-		"path-type": "^3.0.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@dada1134/tslint-config": "^0.2.0",
 		"@types/fs-extra": "^3.0.3",

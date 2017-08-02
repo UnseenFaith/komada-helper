@@ -8,7 +8,7 @@ export async function activate (context: ExtensionContext) {
 
 	const snippets = jsonfile.readFileSync(path.join(__dirname, '../snippets/komada.json'))
 
-	const newPiece = commands.registerCommand('komadaHelper.newPiece', async () => {
+	const newPiece = commands.registerCommand('komada-helper.newPiece', async () => {
 
 		if (!workspace.rootPath) return window.showErrorMessage('You must have a workspace opened.')
 
@@ -60,7 +60,7 @@ export async function activate (context: ExtensionContext) {
 		editor.insertSnippet(generateSnippet(snippets, pieceType, pieceName))
 	})
 
-	const init = commands.registerCommand('komadaHelper.init', async () => {
+	const init = commands.registerCommand('komada-helper.init', async () => {
 		const terminal = window.createTerminal('Komada')
 		terminal.show()
 		terminal.sendText('npm init -y')
@@ -83,6 +83,7 @@ export async function activate (context: ExtensionContext) {
 }
 
 function generateSnippet (snippets, pieceType: string, name: string = '') {
+	// tslint:disable-next-line:no-invalid-template-strings
 	let content: string = snippets[`Create new Komada ${pieceType}`].body.replace('${1:${TM_FILENAME}}', name)
 	// tslint:disable-next-line:curly
 	if (pieceType === 'event') {
