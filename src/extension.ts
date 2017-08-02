@@ -6,7 +6,7 @@ import { commands, window, workspace, ExtensionContext, SnippetString, Uri } fro
 
 export async function activate (context: ExtensionContext) {
 
-	const snippets = jsonfile.readFileSync(path.join(__dirname, '../snippets/komada.json'))
+	const snippets = jsonfile.readFileSync(path.join(__dirname, '../../snippets/komada.json'))
 
 	const newPiece = commands.registerCommand('komada-helper.newPiece', async () => {
 
