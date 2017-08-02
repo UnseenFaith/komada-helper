@@ -1,7 +1,7 @@
 {
 	"name": "komada-helper",
 	"displayName": "Komada",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"preview": true,
 	"publisher": "dada1134",
 	"description": "Komada helper",
@@ -48,7 +48,7 @@
 		],
 		"jsonValidation": [
 			{
-				"fileMatch": "schema.json",
+				"fileMatch": "*Schema.json",
 				"url": "./schema/schema.json"
 			}
 		],

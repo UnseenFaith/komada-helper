@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+## [0.4.1]
+
+### Fixed
+
+- Schema file name matching
+
 ## [0.4.0]
 
 ### Added
@@ -70,7 +76,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - Initial release
 
-[Unreleased]: https://github.com/dada1134/komada-helper/compare/HEAD...0.4.0
+[Unreleased]: https://github.com/dada1134/komada-helper/compare/HEAD...0.4.1
+[0.4.1]: https://github.com/dada1134/komada-helper/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/dada1134/komada-helper/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/dada1134/komada-helper/compare/0.2.3...0.3.0
 [0.2.3]: https://github.com/dada1134/komada-helper/compare/0.2.2...0.2.3
