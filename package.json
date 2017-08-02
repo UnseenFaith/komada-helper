@@ -63,7 +63,10 @@
 			}
 		]
 	},
-	"dependencies": {},
+	"dependencies": {
+		"jsonfile": "^3.0.1",
+		"path-type": "^3.0.0"
+	},
 	"devDependencies": {
 		"@dada1134/tslint-config": "^0.2.0",
 		"@types/fs-extra": "^3.0.3",
@@ -72,7 +75,7 @@
 		"mocha": "^3.4.2",
 		"tslint": "^5.5.0",
 		"typescript": "^2.4.2",
-		"vscode": "^1.0.0"
+		"vscode": "^1.1.4"
 	},
 	"engines": {
 		"vscode": "^1.12.0"
