@@ -4,9 +4,9 @@ Quickly create new pieces and check the `schema.json` on your [Komada](https://k
 
 ## Features
 
-### `schema.json` [schema](schema/schema.json)
+### `*_Schema.json` [schema](schema/schema.json)
 
-The `schema.json` gets IntelliSense, validation and default values.
+The komada settings schema files get IntelliSense, validation and default values.
 
 ### Creating new pieces
 

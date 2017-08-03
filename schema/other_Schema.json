@@ -1,0 +1,64 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema",
+	"id": "https://github.com/dada1134/komada-helper/tree/master/json/schema.json",
+	"title": "Komada settings schema",
+	"type": "object",
+	"patternProperties": {
+		".{1,}": {
+			"title": "Key used to access the setting through the settingGateway",
+			"type": "object",
+			"required": [
+				"type",
+				"default"
+			],
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"User",
+						"Channel",
+						"Guild",
+						"Role",
+						"Boolean",
+						"String",
+						"Integer",
+						"Float",
+						"url",
+						"Command"
+					],
+					"description": "The data type",
+					"default": ""
+				},
+				"default": {
+					"type": [
+						"string",
+						"null",
+						"array",
+						"boolean",
+						"integer",
+						"number"
+					],
+					"description": "The default value for this key",
+					"default": null
+				},
+				"array": {
+					"type": "boolean",
+					"description": "If the value is an array",
+					"default": false
+				},
+				"sql": {
+					"type": "string",
+					"description": "SQL query when creating a new row",
+					"default": ""
+				}
+			},
+			"default": {
+				"type": "",
+				"default": null,
+				"array": false
+			}
+		}
+	},
+	"default": {},
+	"additionalProperties": false
+}

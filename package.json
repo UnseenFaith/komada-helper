@@ -1,7 +1,7 @@
 {
 	"name": "komada-helper",
 	"displayName": "Komada",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"preview": true,
 	"publisher": "dada1134",
 	"description": "Komada helper",
@@ -48,8 +48,13 @@
 		],
 		"jsonValidation": [
 			{
+				"fileMatch": "guilds_Schema.json",
+				"url": "./schema/guilds_Schema.json"
+			},
+			{
+				"fileMatchWithExtglobChangeOnceAdded": "!(guild)*Schema.json, or something like that, once we can use extglob",
 				"fileMatch": "*Schema.json",
-				"url": "./schema/schema.json"
+				"url": "./schema/other_Schema.json"
 			}
 		],
 		"commands": [
